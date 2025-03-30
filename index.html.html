@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>순정률 음정 계산기</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #ffffff;
+            color: #111;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        .input-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        input[type="number"] {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 999px;
+            width: 200px;
+            max-width: 100%;
+            transition: box-shadow 0.3s ease;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.3);
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 999px;
+            background-color: #A8C3A0;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        button:hover {
+            background-color: #8CA986;
+            transform: scale(1.03);
+        }
+        table {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        th {
+            background-color: #A8C3A0;
+            color: white;
+            padding: 14px;
+        }
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        @media (max-width: 600px) {
+            input[type="number"], button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>순정률 음정 계산기</h2>
+    <div class="input-container">
+        <input type="number" id="baseFreq" placeholder="예: 440">
+        <button onclick="calculate()">계산</button>
+    </div>
+
+    <table id="resultTable">
+        <tr>
+            <th>음정</th>
+            <th>비율</th>
+            <th>주파수 (Hz)</th>
+        </tr>
+    </table>
+
+    <script>
+        const intervals = [
+            { name: "장2도", ratio: 9/8 },
+            { name: "단3도", ratio: 6/5 },
+            { name: "장3도", ratio: 5/4 },
+            { name: "완전4도", ratio: 4/3 },
+            { name: "증4도", ratio: 45/32 },
+            { name: "감5도", ratio: 64/45 },
+            { name: "완전5도", ratio: 3/2 },
+            { name: "단6도", ratio: 8/5 },
+            { name: "장6도", ratio: 5/3 },
+            { name: "감7도", ratio: 128/75 },
+            { name: "단7도", ratio: 9/5 },
+            { name: "장7도", ratio: 15/8 }
+        ];
+
+        function calculate() {
+            const base = parseFloat(document.getElementById("baseFreq").value);
+            const table = document.getElementById("resultTable");
+
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+
+            if (isNaN(base) || base <= 0) {
+                alert("올바른 주파수를 입력하세요.");
+                return;
+            }
+
+            for (let interval of intervals) {
+                const freq = (base * interval.ratio).toFixed(2);
+                const row = table.insertRow();
+                row.insertCell().innerText = interval.name;
+                row.insertCell().innerText = interval.ratio.toFixed(5);
+                row.insertCell().innerText = freq;
+            }
+        }
+    </script>
+</body>
+</html>
